@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YouTube Selected Segment</title>
+</head>
+<body style="font-family:Arial;text-align:center">
+  <h2>YouTube Video — Selected Segment</h2>
+  <p>Start: 26:26 | Stop: 31:19</p>
+
+  <div id="player"></div>
+
+  <script>
+    var player;
+    var stopTimer;
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        width: '800',
+        height: '450',
+        videoId: 'KxYcL57gawU',
+        playerVars: {
+          start: 1586,
+          playsinline: 1
+        },
+        events: {
+          onReady: function(event) {
+            event.target.seekTo(1586, true);
+          },
+          onStateChange: function(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+              clearInterval(stopTimer);
+              stopTimer = setInterval(function() {
+                if (player.getCurrentTime() >= 1879) {
+                  player.pauseVideo();
+                  clearInterval(stopTimer);
+                }
+              }, 250);
+            } else {
+              clearInterval(stopTimer);
+            }
+          }
+        }
+      });
+    }
+
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.body.appendChild(tag);
+  </script>
+</body>
+</html>
